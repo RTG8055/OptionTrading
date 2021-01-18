@@ -1,0 +1,5 @@
+https://en.wikipedia.org/wiki/Black%E2%80%93Scholes_model
+
+https://www.investopedia.com/terms/b/blackscholes.asp#:~:text=Also%20called%20Black%2DScholes%2DMerton,to%20expiration%20and%20expected%20volatility.
+
+http://cs229.stanford.edu/proj2016spr/report/052.pdf
