@@ -1,8 +1,9 @@
 import numpy as np
 import tensorflow as tf
 
+#incomplete
 
-class DeepQNetwork:
+class DeepQNetworkAgent:
 	def __init__(
 		self, 
 		n_actions, 
@@ -17,39 +18,41 @@ class DeepQNetwork:
 		output_graph=False
 	):
 
-		self.n_actions = n_actions
-        self.n_features = n_features
-        self.lr = learning_rate
-        self.gamma = reward_decay
-        self.epsilon_max = e_greedy
-        self.replace_target_iter = replace_target_iter
-        self.memory_size = memory_size
-        self.batch_size = batch_size
-        self.epsilon_increment = e_greedy_increment
-        self.epsilon = 0 if e_greedy_increment is not None else self.epsilon_max
+		self.n_actions = n_actions #sell buy hold
+		self.n_features = n_features #previous days
+		self.lr = learning_rate
+		self.gamma = reward_decay
+		self.epsilon_max = e_greedy
+		self.replace_target_iter = replace_target_iter
+		self.memory_size = memory_size
+		self.batch_size = batch_size
+		self.epsilon_increment = e_greedy_increment
+		self.epsilon = 0 if e_greedy_increment is not None else self.epsilon_max
 
-        #total learning step
-        self.learning_step_counter=0
+		#total learning step
+		self.learning_step_counter=0
 
-        #initialize memory to zero [s,a,r,s_]
+		#initialize memory to zero [state,action,reward,state_]
 		self.memory = np.zeros((self.memory_size, n_features * 2 +2))
 
-		#consist of [target_net, evaluate_net]
-		self._build_net()
-		t_params = tf.get_collection('target_net_params')
-		e_params = tf.get_collection('eval_net_params')
-		self.replace_target_op = [tf.assign(t,e) for t,e in zip(t_params,e_params)]
+		#define the main network
+		self.main_network = self._build_network()
 
-		self.sess = tf.Session()
+		#define the target network
+		self.target_network = self._build_network()
 
-		if output_graph:
-			tf.summary.FileWriter("logs/",self.sess.graph)
-
-		self.sess.run(tf.global_variables_initializer())
-		self.cost_his = []
+		#copy the weights of the main network to the target network
+		self.target_network.set_weights(self.main_network.get_weights())
 
 
-	def _build_net(self):
-		# builing the evaluate net
+	#Let's define a function called build_network which is essentially our DQN. 
+	def build_network(self):
+		model = Sequential()
+		model.add(Dense(units=128, activation="relu", input_dim=self.n_features))
+		model.add(Dense(units=256, activation="relu"))
+		model.add(Dense(units=256, activation="relu"))
+		model.add(Dense(units=128, activation="relu"))
+		model.add(Dense(units=self.action_size))
 
-		s
+		model.compile(loss=self.loss, optimizer=self.optimizer)
+		return model
