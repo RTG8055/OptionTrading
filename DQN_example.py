@@ -1,5 +1,5 @@
 import numpy as np
-import keras.backend.tensorflow_backend as backend
+# import keras.backend.tensorflow_backend as backend
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, Conv2D, MaxPooling2D, Activation, Flatten
 from keras.optimizers import Adam
@@ -186,7 +186,7 @@ ep_rewards = [-200]
 # For more repetitive results
 random.seed(1)
 np.random.seed(1)
-tf.set_random_seed(1)
+# tf.set_random_seed(1)
 
 # Memory fraction, used mostly when trai8ning multiple agents
 #gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=MEMORY_FRACTION)
