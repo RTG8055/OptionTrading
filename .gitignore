@@ -4,7 +4,7 @@ __pycache__/
 *$py.class
 
 *.zip
-
+*/__pycache__/
 # C extensions
 *.so
 
