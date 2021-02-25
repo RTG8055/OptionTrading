@@ -260,24 +260,30 @@ class MyStocksEnv(StocksEnv):
     def _calculate_profit(self, action):
         '''
         if any position is squared off, corresponding profit/Loss is calculated
+
+        trade=True only when:
+        you are buying something you have already sold 
+            or 
+        you are selling something you have already bought
         '''
         trade = False
-        if((action == NewActions.Buy.value and abs(self._position) < self.budget) or 
-        (action == NewActions.Sell.value and abs(self._position) > -self.budget)):
+        if((action == NewActions.Buy.value and self._position < 0) or 
+        (action == NewActions.Sell.value and self._position > 0)):
             trade=True
         profit = 0
         if trade or self._done:
             current_price = self.prices[self._current_tick]
             last_trade_price = self.average_price
             if(last_trade_price ==0):
-                last_trade_price = self.prices[self._last_trade_tick]
+                print("ERROR in this case the trade cannot be true") #TODO
+                # last_trade_price = self.prices[self._last_trade_tick]
             if(action == NewActions.Buy.value and self._position<0):
-                profit = last_trade_price - current_price
+                profit = last_trade_price - current_price # Sell Price - Buy Price
             elif(action == NewActions.Sell.value and self._position > 0):
-                profit = current_price - last_trade_price
-            elif(self._done and self._position >0):
+                profit = current_price - last_trade_price # Sell Price - Buy Price
+            elif(self._done and self._position >0): # Extra long positions  ##TODO can be clubed
                 profit = (current_price - last_trade_price) * abs(self._position)
-            elif(self._done and self._position < 0 ):
+            elif(self._done and self._position < 0 ): # Extra short positions
                 profit = (last_trade_price - current_price) * abs(self._position)
 
         return profit
